@@ -1,7 +1,8 @@
-from flask import Flask, render_template, request, redirect, url_for
+from flask import Flask, render_template, request, redirect, url_for, flash
 import sqlite3
 
 app = Flask(__name__)
+app.secret_key = 'your_secret_key'  # Needed for flashing messages
 
 @app.route('/')
 def index():
@@ -28,10 +29,19 @@ def book_ticket():
         ''', (name, age, phone, email, window_seat_preference))
         
         user_id = cursor.lastrowid
+        print(f"Inserted user with ID: {user_id}")
         
         # Get train_id from train_no
         cursor.execute('SELECT id FROM train_info WHERE train_no = ?', (train_no,))
-        train_id = cursor.fetchone()[0]
+        train = cursor.fetchone()
+        
+        if train is None:
+            conn.close()
+            flash('Train number does not exist.', 'error')
+            return redirect(url_for('book_ticket'))
+        
+        train_id = train[0]
+        print(f"Found train with ID: {train_id}")
         
         # Insert ticket booking data
         cursor.execute('''
@@ -42,6 +52,7 @@ def book_ticket():
         conn.commit()
         conn.close()
         
+        flash('Ticket booked successfully!', 'success')
         return redirect(url_for('index'))
     
     return render_template('book_ticket.html')
@@ -60,6 +71,7 @@ def view_tickets():
     ''')
     
     tickets = cursor.fetchall()
+    print(f"Retrieved tickets: {tickets}")
     conn.close()
     
     return render_template('view_tickets.html', tickets=tickets)
