@@ -7,6 +7,7 @@
         <table>
             <thead>
                 <tr>
+                    <th>Ticket ID</th>
                     <th>Passenger Name</th>
                     <th>Age</th>
                     <th>Phone</th>
@@ -24,10 +25,11 @@
                         <td>{{ ticket[1] }}</td>
                         <td>{{ ticket[2] }}</td>
                         <td>{{ ticket[3] }}</td>
-                        <td>{{ 'Yes' if ticket[4] else 'No' }}</td>
-                        <td>{{ ticket[5] }}</td>
+                        <td>{{ ticket[4] }}</td>
+                        <td>{{ 'Yes' if ticket[5] else 'No' }}</td>
                         <td>{{ ticket[6] }}</td>
                         <td>{{ ticket[7] }}</td>
+                        <td>{{ ticket[8] }}</td>
                     </tr>
                 {% endfor %}
             </tbody>

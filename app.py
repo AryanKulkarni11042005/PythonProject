@@ -63,7 +63,7 @@ def view_tickets():
     cursor = conn.cursor()
     
     cursor.execute('''
-        SELECT users.name, users.age, users.phone, users.email, users.window_seat_preference,
+        SELECT ticket_booking.id, users.name, users.age, users.phone, users.email, users.window_seat_preference,
                train_info.train_no, train_info.train_name, ticket_booking.seat_no
         FROM ticket_booking
         JOIN users ON ticket_booking.user_id = users.id
@@ -76,9 +76,23 @@ def view_tickets():
     
     return render_template('view_tickets.html', tickets=tickets)
 
-@app.route('/cancel_ticket')
+@app.route('/cancel_ticket', methods=['GET', 'POST'])
 def cancel_ticket():
-    # Implement the logic for canceling a ticket
+    if request.method == 'POST':
+        ticket_id = request.form['ticket_id']
+        
+        conn = sqlite3.connect('railway.db')
+        cursor = conn.cursor()
+        
+        # Delete the ticket booking
+        cursor.execute('DELETE FROM ticket_booking WHERE id = ?', (ticket_id,))
+        
+        conn.commit()
+        conn.close()
+        
+        flash('Ticket canceled successfully!', 'success')
+        return redirect(url_for('index'))
+    
     return render_template('cancel_ticket.html')
 
 if __name__ == '__main__':
