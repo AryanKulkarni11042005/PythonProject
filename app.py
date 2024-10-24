@@ -1,60 +1,72 @@
-from flask import Flask, render_template, request, redirect, url_for, flash
+from flask import Flask, render_template, request, redirect, url_for
 import sqlite3
 
 app = Flask(__name__)
-app.secret_key = 'your_secret_key'
 
-# SQLite database setup
-DATABASE = 'railway.db'
-
-def get_db_connection():
-    conn = sqlite3.connect(DATABASE)
-    conn.row_factory = sqlite3.Row
-    return conn
-
-# Routes for the application
 @app.route('/')
 def index():
     return render_template('index.html')
 
-@app.route('/book-ticket', methods=['GET', 'POST'])
+@app.route('/book_ticket', methods=['GET', 'POST'])
 def book_ticket():
     if request.method == 'POST':
         name = request.form['name']
+        age = request.form['age']
+        phone = request.form['phone']
+        email = request.form['email']
+        window_seat_preference = 'window_seat_preference' in request.form
         train_no = request.form['train_no']
         seat_no = request.form['seat_no']
-
-        if not name or not train_no or not seat_no:
-            flash("All fields are required!", "error")
-            return redirect(url_for('book_ticket'))
-
-        conn = get_db_connection()
-        conn.execute("INSERT INTO tickets (name, train_no, seat_no) VALUES (?, ?, ?)", (name, train_no, seat_no))
+        
+        conn = sqlite3.connect('railway.db')
+        cursor = conn.cursor()
+        
+        # Insert user data
+        cursor.execute('''
+            INSERT INTO users (name, age, phone, email, window_seat_preference)
+            VALUES (?, ?, ?, ?, ?)
+        ''', (name, age, phone, email, window_seat_preference))
+        
+        user_id = cursor.lastrowid
+        
+        # Get train_id from train_no
+        cursor.execute('SELECT id FROM train_info WHERE train_no = ?', (train_no,))
+        train_id = cursor.fetchone()[0]
+        
+        # Insert ticket booking data
+        cursor.execute('''
+            INSERT INTO ticket_booking (user_id, train_id, seat_no)
+            VALUES (?, ?, ?)
+        ''', (user_id, train_id, seat_no))
+        
         conn.commit()
         conn.close()
-
-        flash('Ticket booked successfully!', 'success')
-        return redirect(url_for('view_tickets'))
+        
+        return redirect(url_for('index'))
+    
     return render_template('book_ticket.html')
 
-@app.route('/view-tickets')
+@app.route('/view_tickets')
 def view_tickets():
-    conn = get_db_connection()
-    tickets = conn.execute("SELECT * FROM tickets").fetchall()
+    conn = sqlite3.connect('railway.db')
+    cursor = conn.cursor()
+    
+    cursor.execute('''
+        SELECT users.name, users.age, users.phone, users.email, users.window_seat_preference,
+               train_info.train_no, train_info.train_name, ticket_booking.seat_no
+        FROM ticket_booking
+        JOIN users ON ticket_booking.user_id = users.id
+        JOIN train_info ON ticket_booking.train_id = train_info.id
+    ''')
+    
+    tickets = cursor.fetchall()
     conn.close()
+    
     return render_template('view_tickets.html', tickets=tickets)
 
-@app.route('/cancel-ticket', methods=['GET', 'POST'])
+@app.route('/cancel_ticket')
 def cancel_ticket():
-    if request.method == 'POST':
-        ticket_id = request.form['ticket_id']
-        conn = get_db_connection()
-        conn.execute("DELETE FROM tickets WHERE id = ?", (ticket_id,))
-        conn.commit()
-        conn.close()
-
-        flash('Ticket cancelled successfully!', 'success')
-        return redirect(url_for('view_tickets'))
+    # Implement the logic for canceling a ticket
     return render_template('cancel_ticket.html')
 
 if __name__ == '__main__':

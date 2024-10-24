@@ -1,24 +1,18 @@
-/* Reset some default browser styles */
-body, h1, h2, h3, h4, h5, h6, p, ul, ol, li, a {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-}
+/* static/css/style.css */
 
-/* Base styles */
+/* General styles */
 body {
     font-family: Arial, sans-serif;
-    line-height: 1.6;
     background-color: #f4f4f4;
-    color: #333;
-    padding: 20px;
+    margin: 0;
+    padding: 0;
 }
 
 /* Header styles */
 header {
-    background: #333;
-    color: #fff;
-    padding: 10px 0;
+    background-color: #333;
+    color: white;
+    padding: 20px 0;
     text-align: center;
 }
 
@@ -27,43 +21,62 @@ header h1 {
     font-size: 2em;
 }
 
-/* Navigation styles */
+/* Navigation bar styles */
 nav {
-    margin: 20px 0;
-    text-align: center;
+    margin-top: 10px;
 }
 
 nav a {
-    color: #333;
+    color: white;
     text-decoration: none;
-    margin: 0 10px;
-    padding: 5px 10px;
-    border: 1px solid #333;
-    border-radius: 5px;
-    transition: background 0.3s, color 0.3s;
+    margin: 0 15px;
+    font-size: 16px;
 }
 
 nav a:hover {
-    background: #333;
-    color: #fff;
+    text-decoration: underline;
 }
 
-/* Main content styles */
-main {
-    background: #fff;
+/* Other styles */
+h2 {
+    text-align: center;
+    color: #333;
+}
+
+form {
+    max-width: 420px;
+    margin: 50px auto;
     padding: 20px;
-    border-radius: 5px;
+    background: #fff;
+    border-radius: 8px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
 
-/* Footer styles */
-footer {
-    background: #333;
-    color: #fff;
-    text-align: center;
-    padding: 10px 0;
-    margin-top: 20px;
-    position: fixed;
+label {
+    display: block;
+    margin-bottom: 8px;
+    color: #555;
+}
+
+input[type="text"] {
+    width: 90%;
+    padding: 10px;
+    margin-bottom: 20px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+button {
     width: 100%;
-    bottom: 0;
+    padding: 10px;
+    background-color: #28a745;
+    border: none;
+    border-radius: 4px;
+    color: white;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: #218838;
 }
