@@ -41,8 +41,15 @@ def create_db():
         )
     ''')
     
+    # Insert initial train data
+    conn.execute('''
+        INSERT INTO train_info (train_no, train_name, source, destination, departure_time, arrival_time)
+        VALUES ('100', 'Express Train', 'City A', 'City B', '08:00', '12:00')
+    ''')
+    
+    conn.commit()
     conn.close()
 
 if __name__ == '__main__':
     create_db()
-    print("Database and tables created.")
+    print("Database and tables created with initial data.")
