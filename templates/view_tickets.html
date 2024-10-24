@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <h2>View All Tickets</h2>
+
+    {% if tickets %}
+        <table>
+            <thead>
+                <tr>
+                    <th>Ticket ID</th>
+                    <th>Passenger Name</th>
+                    <th>Train Number</th>
+                    <th>Seat Number</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for ticket in tickets %}
+                    <tr>
+                        <td>{{ ticket.id }}</td>
+                        <td>{{ ticket.name }}</td>
+                        <td>{{ ticket.train_no }}</td>
+                        <td>{{ ticket.seat_no }}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <p>No tickets found.</p>
+    {% endif %}
+{% endblock %}
