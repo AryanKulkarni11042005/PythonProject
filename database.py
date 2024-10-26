@@ -4,6 +4,11 @@ import sqlite3
 def create_db():
     conn = sqlite3.connect('railway.db')
     
+    # Drop existing tables if they exist
+    conn.execute('DROP TABLE IF EXISTS users')
+    conn.execute('DROP TABLE IF EXISTS train_info')
+    conn.execute('DROP TABLE IF EXISTS ticket_booking')
+    
     # Create users table
     conn.execute('''
         CREATE TABLE IF NOT EXISTS users (
@@ -25,7 +30,8 @@ def create_db():
             source TEXT NOT NULL,
             destination TEXT NOT NULL,
             departure_time TEXT NOT NULL,
-            arrival_time TEXT NOT NULL
+            arrival_time TEXT NOT NULL,
+            price REAL NOT NULL
         )
     ''')
     
@@ -35,7 +41,15 @@ def create_db():
             id INTEGER PRIMARY KEY AUTOINCREMENT,
             user_id INTEGER NOT NULL,
             train_id INTEGER NOT NULL,
+            name TEXT NOT NULL,
+            age INTEGER NOT NULL,
+            phone TEXT NOT NULL,
+            email TEXT NOT NULL,
+            window_seat_preference BOOLEAN NOT NULL,
+            train_no TEXT NOT NULL,
+            train_name TEXT NOT NULL,
             seat_no TEXT NOT NULL,
+            travel_date TEXT NOT NULL,
             FOREIGN KEY (user_id) REFERENCES users(id),
             FOREIGN KEY (train_id) REFERENCES train_info(id)
         )
@@ -43,8 +57,8 @@ def create_db():
     
     # Insert initial train data
     conn.execute('''
-        INSERT INTO train_info (train_no, train_name, source, destination, departure_time, arrival_time)
-        VALUES ('100', 'Express Train', 'City A', 'City B', '08:00', '12:00')
+        INSERT INTO train_info (train_no, train_name, source, destination, departure_time, arrival_time, price)
+        VALUES ('100', 'Express Train', 'Mumbai', 'Delhi', '08:00', '12:00', 50.0)
     ''')
     
     conn.commit()

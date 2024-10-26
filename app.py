@@ -8,15 +8,53 @@ app.secret_key = 'your_secret_key'  # Needed for flashing messages
 def index():
     return render_template('index.html')
 
+@app.route('/search_trains', methods=['GET', 'POST'])
+def search_trains():
+    if request.method == 'POST':
+        from_location = request.form['from_location']
+        to_location = request.form['to_location']
+        travel_date = request.form['travel_date']
+        
+        conn = sqlite3.connect('railway.db')
+        cursor = conn.cursor()
+        
+        cursor.execute('''
+            SELECT id, train_no, train_name, source, destination, departure_time, arrival_time, price
+            FROM train_info
+            WHERE source = ? AND destination = ?
+        ''', (from_location, to_location))
+        
+        trains = cursor.fetchall()
+        conn.close()
+        
+        return render_template('select_train.html', trains=trains, travel_date=travel_date)
+    
+    return render_template('search_trains.html')
+
 @app.route('/book_ticket', methods=['GET', 'POST'])
 def book_ticket():
+    if request.method == 'GET':
+        train_id = request.args.get('train_id')
+        travel_date = request.args.get('travel_date')
+        return render_template('book_ticket.html', train_id=train_id, travel_date=travel_date)
+    
     if request.method == 'POST':
+        print(request.form)  # Debugging statement to check form data
+        required_fields = ['train_id', 'travel_date', 'name', 'age', 'phone', 'email', 'seat_no']
+        missing_fields = [field for field in required_fields if field not in request.form]
+        
+        if missing_fields:
+            print(f"Missing form fields: {', '.join(missing_fields)}")
+            flash(f"Missing form fields: {', '.join(missing_fields)}", 'error')
+            return redirect(url_for('search_trains'))
+        
+        train_id = request.form['train_id']
+        travel_date = request.form['travel_date']
         name = request.form['name']
         age = request.form['age']
         phone = request.form['phone']
         email = request.form['email']
         window_seat_preference = 'window_seat_preference' in request.form
-        train_no = request.form['train_no']
         seat_no = request.form['seat_no']
         
         conn = sqlite3.connect('railway.db')
@@ -31,47 +69,39 @@ def book_ticket():
         user_id = cursor.lastrowid
         print(f"Inserted user with ID: {user_id}")
         
-        # Get train_id from train_no
-        cursor.execute('SELECT id FROM train_info WHERE train_no = ?', (train_no,))
-        train = cursor.fetchone()
+        # Fetch train information
+        cursor.execute('SELECT train_no, train_name FROM train_info WHERE id = ?', (train_id,))
+        train_info = cursor.fetchone()
+        if not train_info:
+            print(f"No train found with ID: {train_id}")
+            flash(f"No train found with ID: {train_id}", 'error')
+            return redirect(url_for('search_trains'))
         
-        if train is None:
-            conn.close()
-            flash('Train number does not exist.', 'error')
-            return redirect(url_for('book_ticket'))
-        
-        train_id = train[0]
-        print(f"Found train with ID: {train_id}")
+        train_no, train_name = train_info
         
         # Insert ticket booking data
         cursor.execute('''
-            INSERT INTO ticket_booking (user_id, train_id, seat_no)
-            VALUES (?, ?, ?)
-        ''', (user_id, train_id, seat_no))
+            INSERT INTO ticket_booking (user_id, train_id, name, age, phone, email, window_seat_preference, train_no, train_name, seat_no, travel_date)
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+        ''', (user_id, train_id, name, age, phone, email, window_seat_preference, train_no, train_name, seat_no, travel_date))
         
         conn.commit()
+        print(f"Inserted ticket with user_id: {user_id}, train_id: {train_id}, seat_no: {seat_no}, travel_date: {travel_date}")
+        
         conn.close()
         
         flash('Ticket booked successfully!', 'success')
         return redirect(url_for('index'))
-    
-    return render_template('book_ticket.html')
 
 @app.route('/view_tickets')
 def view_tickets():
     conn = sqlite3.connect('railway.db')
     cursor = conn.cursor()
     
-    cursor.execute('''
-        SELECT ticket_booking.id, users.name, users.age, users.phone, users.email, users.window_seat_preference,
-               train_info.train_no, train_info.train_name, ticket_booking.seat_no
-        FROM ticket_booking
-        JOIN users ON ticket_booking.user_id = users.id
-        JOIN train_info ON ticket_booking.train_id = train_info.id
-    ''')
+    cursor.execute('SELECT * FROM ticket_booking')
     
     tickets = cursor.fetchall()
-    print(f"Retrieved tickets: {tickets}")
+    print(f"Retrieved tickets: {tickets}")  # Debugging statement to check fetched tickets
     conn.close()
     
     return render_template('view_tickets.html', tickets=tickets)

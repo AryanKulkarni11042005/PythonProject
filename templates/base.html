@@ -10,13 +10,19 @@
     <header>
         <h1>Railway Ticketing System</h1>
         <nav>
-            <a href="{{ url_for('index') }}">Home</a> |
-            <a href="{{ url_for('book_ticket') }}">Book Ticket</a> |
-            <a href="{{ url_for('view_tickets') }}">View Tickets</a> |
-            <a href="{{ url_for('cancel_ticket') }}">Cancel Ticket</a>
+            <ul>
+                <li><a href="{{ url_for('index') }}">Home</a></li>
+                <li><a href="{{ url_for('search_trains') }}">Search Trains</a></li>
+                <li><a href="{{ url_for('view_tickets') }}">View Tickets</a></li>
+                <li><a href="{{ url_for('cancel_ticket') }}">Cancel Ticket</a></li>
+            </ul>
         </nav>
     </header>
-    {% block content %}
-    {% endblock %}
+    <main>
+        {% block content %}{% endblock %}
+    </main>
+    <footer>
+        <p>&copy; 2023 Railway Ticketing System</p>
+    </footer>
 </body>
 </html>

@@ -12,6 +12,8 @@
         {% endif %}
     {% endwith %}
     <form method="POST" action="{{ url_for('book_ticket') }}">
+        <input type="hidden" name="train_id" value="{{ request.args.get('train_id') }}">
+        <input type="hidden" name="travel_date" value="{{ request.args.get('travel_date') }}">
         <label for="name">Passenger Name:</label>
         <input type="text" id="name" name="name" required>
         <br>
@@ -26,9 +28,6 @@
         <br>
         <label for="window_seat_preference">Window Seat Preference:</label>
         <input type="checkbox" id="window_seat_preference" name="window_seat_preference">
-        <br>
-        <label for="train_no">Train Number:</label>
-        <input type="text" id="train_no" name="train_no" required>
         <br>
         <label for="seat_no">Seat Number:</label>
         <input type="text" id="seat_no" name="seat_no" required>

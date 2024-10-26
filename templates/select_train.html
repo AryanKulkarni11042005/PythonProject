@@ -1,0 +1,41 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <h2>Select a Train</h2>
+    {% if trains %}
+        <form method="GET" action="{{ url_for('book_ticket') }}">
+            <input type="hidden" name="travel_date" value="{{ travel_date }}">
+            <table class="train_select">
+                <thead>
+                    <tr>
+                        <th>Select</th>
+                        <th>Train Number</th>
+                        <th>Train Name</th>
+                        <th>From</th>
+                        <th>To</th>
+                        <th>Departure Time</th>
+                        <th>Arrival Time</th>
+                        <th>Price</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for train in trains %}
+                        <tr>
+                            <td><input type="radio" name="train_id" value="{{ train[0] }}" required></td>
+                            <td>{{ train[1] }}</td>
+                            <td>{{ train[2] }}</td>
+                            <td>{{ train[3] }}</td>
+                            <td>{{ train[4] }}</td>
+                            <td>{{ train[5] }}</td>
+                            <td>{{ train[6] }}</td>
+                            <td>{{ train[7] }}</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            <button type="submit">Proceed to Book</button>
+        </form>
+    {% else %}
+        <p>No trains found for the selected route and date.</p>
+    {% endif %}
+{% endblock %}

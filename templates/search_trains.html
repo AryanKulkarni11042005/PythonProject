@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <h2>Search Trains</h2>
+    <form method="POST" action="{{ url_for('search_trains') }}">
+        <label for="from_location">From:</label>
+        <input list="from_locations" id="from_location" name="from_location" required>
+        <datalist id="from_locations">
+            <option value="Mumbai">
+            <option value="Delhi">
+            <option value="Chennai">
+            <option value="Kolkata">
+            <option value="Bangalore">
+        </datalist>
+        <br>
+        <label for="to_location">To:</label>
+        <input list="to_locations" id="to_location" name="to_location" required>
+        <datalist id="to_locations">
+            <option value="Mumbai">
+            <option value="Delhi">
+            <option value="Chennai">
+            <option value="Kolkata">
+            <option value="Bangalore">
+        </datalist>
+        <br>
+        <label for="travel_date">Date:</label>
+        <input type="date" id="travel_date" name="travel_date" required>
+        <br>
+        <button type="submit">Search Trains</button>
+    </form>
+{% endblock %}
