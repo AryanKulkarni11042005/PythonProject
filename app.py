@@ -85,13 +85,17 @@ def book_ticket():
             VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
         ''', (user_id, train_id, name, age, phone, email, window_seat_preference, train_no, train_name, seat_no, travel_date))
         
+        ticket_id = cursor.lastrowid
         conn.commit()
         print(f"Inserted ticket with user_id: {user_id}, train_id: {train_id}, seat_no: {seat_no}, travel_date: {travel_date}")
         
+        # Fetch the ticket information
+        cursor.execute('SELECT * FROM ticket_booking WHERE id = ?', (ticket_id,))
+        ticket_info = cursor.fetchone()
+        
         conn.close()
         
-        flash('Ticket booked successfully!', 'success')
-        return redirect(url_for('index'))
+        return render_template('booking_success.html', ticket=ticket_info)
 
 @app.route('/view_tickets')
 def view_tickets():
@@ -120,7 +124,7 @@ def cancel_ticket():
         conn.commit()
         conn.close()
         
-        flash('Ticket canceled successfully!', 'success')
+        
         return redirect(url_for('index'))
     
     return render_template('cancel_ticket.html')
