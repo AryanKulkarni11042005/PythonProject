@@ -1,5 +1,6 @@
 from flask import Flask, render_template, request, redirect, url_for, flash
 import sqlite3
+import random
 
 app = Flask(__name__)
 app.secret_key = 'your_secret_key'  # Needed for flashing messages
@@ -40,7 +41,7 @@ def book_ticket():
     
     if request.method == 'POST':
         print(request.form)  # Debugging statement to check form data
-        required_fields = ['train_id', 'travel_date', 'name', 'age', 'phone', 'email', 'seat_no']
+        required_fields = ['train_id', 'travel_date', 'name', 'age', 'phone', 'email', 'coach']
         missing_fields = [field for field in required_fields if field not in request.form]
         
         if missing_fields:
@@ -55,7 +56,16 @@ def book_ticket():
         phone = request.form['phone']
         email = request.form['email']
         window_seat_preference = 'window_seat_preference' in request.form
-        seat_no = request.form['seat_no']
+        coach = request.form['coach']
+        
+        # Auto-generate seat number
+        seat_no = random.choice([i for i in range(1, 71) if (window_seat_preference and i % 3 == 0) or not window_seat_preference])
+        
+        # Generate coach number
+        if coach == 'General':
+            coach_number = f'G{random.randint(1, 2)}'
+        else:
+            coach_number = f'S{random.randint(1, 14)}'
         
         conn = sqlite3.connect('railway.db')
         cursor = conn.cursor()
@@ -81,9 +91,9 @@ def book_ticket():
         
         # Insert ticket booking data
         cursor.execute('''
-            INSERT INTO ticket_booking (user_id, train_id, name, age, phone, email, window_seat_preference, train_no, train_name, seat_no, travel_date)
-            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
-        ''', (user_id, train_id, name, age, phone, email, window_seat_preference, train_no, train_name, seat_no, travel_date))
+            INSERT INTO ticket_booking (user_id, train_id, name, age, phone, email, window_seat_preference, train_no, train_name, coach, coach_number, seat_no, travel_date)
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+        ''', (user_id, train_id, name, age, phone, email, window_seat_preference, train_no, train_name, coach, coach_number, seat_no, travel_date))
         
         ticket_id = cursor.lastrowid
         conn.commit()
@@ -110,6 +120,21 @@ def view_tickets():
     
     return render_template('view_tickets.html', tickets=tickets)
 
+@app.route('/ticket_view/<int:ticket_id>')
+def ticket_view(ticket_id):
+    conn = sqlite3.connect('railway.db')
+    cursor = conn.cursor()
+    
+    cursor.execute('SELECT * FROM ticket_booking WHERE id = ?', (ticket_id,))
+    ticket = cursor.fetchone()
+    conn.close()
+    
+    if not ticket:
+        flash('Ticket not found', 'error')
+        return redirect(url_for('view_tickets'))
+    
+    return render_template('ticket_view.html', ticket=ticket)
+
 @app.route('/cancel_ticket', methods=['GET', 'POST'])
 def cancel_ticket():
     if request.method == 'POST':
@@ -124,7 +149,7 @@ def cancel_ticket():
         conn.commit()
         conn.close()
         
-        
+        flash('Ticket canceled successfully!', 'success')
         return redirect(url_for('index'))
     
     return render_template('cancel_ticket.html')

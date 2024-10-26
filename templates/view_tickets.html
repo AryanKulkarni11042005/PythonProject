@@ -4,38 +4,15 @@
     <h2>View All Tickets</h2>
 
     {% if tickets %}
-        <table>
-            <thead>
-                <tr>
-                    <th>Ticket ID</th>
-                    <th>Passenger Name</th>
-                    <th>Age</th>
-                    <th>Phone</th>
-                    <th>Email</th>
-                    <th>Window Seat Preference</th>
-                    <th>Train Number</th>
-                    <th>Train Name</th>
-                    <th>Seat Number</th>
-                    <th>Travel Date</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for ticket in tickets %}
-                    <tr>
-                        <td>{{ ticket[0] }}</td>
-                        <td>{{ ticket[3] }}</td>
-                        <td>{{ ticket[4] }}</td>
-                        <td>{{ ticket[5] }}</td>
-                        <td>{{ ticket[6] }}</td>
-                        <td>{{ 'Yes' if ticket[7] else 'No' }}</td>
-                        <td>{{ ticket[8] }}</td>
-                        <td>{{ ticket[9] }}</td>
-                        <td>{{ ticket[10] }}</td>
-                        <td>{{ ticket[11] }}</td>
-                    </tr>
-                {% endfor %}
-            </tbody>
-        </table>
+        <div class="ticket-cards">
+            {% for ticket in tickets %}
+                <div class="ticket-card" onclick="window.location.href='{{ url_for('ticket_view', ticket_id=ticket[0]) }}'">
+                    <h3>{{ ticket[3] }}</h3>
+                    <p>Date: {{ ticket[13] }}</p>
+                    <p>Train: {{ ticket[9] }}</p>
+                </div>
+            {% endfor %}
+        </div>
     {% else %}
         <p>No tickets found.</p>
     {% endif %}

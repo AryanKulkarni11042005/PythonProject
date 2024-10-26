@@ -48,7 +48,9 @@ def create_db():
             window_seat_preference BOOLEAN NOT NULL,
             train_no TEXT NOT NULL,
             train_name TEXT NOT NULL,
-            seat_no TEXT NOT NULL,
+            coach TEXT NOT NULL,
+            coach_number TEXT NOT NULL,
+            seat_no INTEGER NOT NULL,
             travel_date TEXT NOT NULL,
             FOREIGN KEY (user_id) REFERENCES users(id),
             FOREIGN KEY (train_id) REFERENCES train_info(id)

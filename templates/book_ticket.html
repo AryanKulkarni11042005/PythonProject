@@ -29,8 +29,12 @@
         <label for="window_seat_preference">Window Seat Preference:</label>
         <input type="checkbox" id="window_seat_preference" name="window_seat_preference">
         <br>
-        <label for="seat_no">Seat Number:</label>
-        <input type="text" id="seat_no" name="seat_no" required>
+        <label for="coach">Coach Type:</label>
+        <select id="coach" name="coach" required>
+            <option value="AC">AC</option>
+            <option value="NON AC">NON AC</option>
+            <option value="General">General</option>
+        </select>
         <br>
         <button type="submit">Book Ticket</button>
     </form>
