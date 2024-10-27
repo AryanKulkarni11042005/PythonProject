@@ -52,6 +52,9 @@ def create_db():
             coach_number TEXT NOT NULL,
             seat_no INTEGER NOT NULL,
             travel_date TEXT NOT NULL,
+            time_of_booking TEXT NOT NULL,
+            no_of_adults INTEGER NOT NULL,
+            no_of_children INTEGER NOT NULL,
             FOREIGN KEY (user_id) REFERENCES users(id),
             FOREIGN KEY (train_id) REFERENCES train_info(id)
         )

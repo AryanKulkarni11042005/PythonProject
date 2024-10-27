@@ -52,6 +52,18 @@
             <th>Travel Date</th>
             <td>{{ ticket[13] }}</td>
         </tr>
+        <tr>
+            <th>Number of Adults</th>
+            <td>{{ ticket[15] }}</td>
+        </tr>
+        <tr>
+            <th>Number of Children</th>
+            <td>{{ ticket[16] }}</td>
+        </tr>
+        <tr>
+            <th>Total Amount</th>
+            <td>{{ (ticket[15] + ticket[16] * 0.5) * price_per_ticket }}</td>
+        </tr>
     </table>
     <button onclick="window.print()">Print Ticket</button>
     <a href="{{ url_for('view_tickets') }}">Back to Tickets</a>

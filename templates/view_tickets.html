@@ -10,6 +10,9 @@
                     <h3>{{ ticket[3] }}</h3>
                     <p>Date: {{ ticket[13] }}</p>
                     <p>Train: {{ ticket[9] }}</p>
+                    <p>Adults: {{ ticket[15] }}</p>
+                    <p>Children: {{ ticket[16] }}</p>
+                    <p>Price: {{ (ticket[15] + ticket[16] * 0.5) * price_per_ticket }}</p>
                 </div>
             {% endfor %}
         </div>

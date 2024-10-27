@@ -1,20 +1,36 @@
 {% extends 'base.html' %}
 
 {% block content %}
-    <h2>Cancel a Ticket</h2>
-    {% with messages = get_flashed_messages(with_categories=true) %}
-        {% if messages %}
-            <ul class="flashes">
-                {% for category, message in messages %}
-                    <li class="{{ category }}">{{ message }}</li>
-                {% endfor %}
-            </ul>
-        {% endif %}
-    {% endwith %}
-    <form method="POST" action="{{ url_for('cancel_ticket') }}">
-        <label for="ticket_id">Ticket ID:</label>
-        <input type="text" id="ticket_id" name="ticket_id" required>
-        <br>
-        <button type="submit">Cancel Ticket</button>
-    </form>
+    <h2>Cancel Ticket</h2>
+
+    {% if tickets %}
+        <div class="ticket-cards">
+            {% for ticket in tickets %}
+                <div class="ticket-card" onclick="confirmCancel('{{ ticket[0] }}', '{{ ticket[3] }}', '{{ ticket[13] }}', '{{ ticket[9] }}')">
+                    <h3>{{ ticket[3] }}</h3>
+                    <p>Date: {{ ticket[13] }}</p>
+                    <p>Train: {{ ticket[9] }}</p>
+                </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <p>No tickets found.</p>
+    {% endif %}
+
+    <script>
+        function confirmCancel(ticketId, passengerName, travelDate, trainName) {
+            if (confirm(`Are you sure you want to cancel the ticket for ${passengerName} on ${travelDate} for train ${trainName}?`)) {
+                fetch(`{{ url_for('confirm_cancel_ticket') }}?ticket_id=${ticketId}`)
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.status === 'success') {
+                            alert(`${data.message} ${data.refund_message}`);
+                            window.location.href = '{{ url_for('index') }}';
+                        } else {
+                            alert(data.message);
+                        }
+                    });
+            }
+        }
+    </script>
 {% endblock %}
