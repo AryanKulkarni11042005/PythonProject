@@ -3,11 +3,12 @@
     <h2>Cancel Ticket</h2>
     {% if tickets %}
         <div class="ticket-cards">
-            {% for ticket in tickets %}
+            {% for ticket, total_amount in tickets %}
                 <div class="ticket-card" onclick="confirmCancel('{{ ticket[0] }}', '{{ ticket[3] }}', '{{ ticket[13] }}', '{{ ticket[9] }}')">
                     <h3>{{ ticket[3] }}</h3>
                     <p>Date: {{ ticket[13] }}</p>
                     <p>Train: {{ ticket[9] }}</p>
+                    <p>Price: {{ total_amount }}</p>
                 </div>
             {% endfor %}
         </div>
