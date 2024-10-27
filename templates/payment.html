@@ -1,0 +1,52 @@
+{% extends 'base.html' %}
+{% block content %}
+    <h2>Payment Information</h2>
+    <p>Please review your payment details:</p>
+    <table class="train_select">
+        <tr>
+            <th>Passenger Name</th>
+            <td>{{ ticket[3] }}</td>
+        </tr>
+        <tr>
+            <th>Train Number</th>
+            <td>{{ ticket[8] }}</td>
+        </tr>
+        <tr>
+            <th>Train Name</th>
+            <td>{{ ticket[9] }}</td>
+        </tr>
+        <tr>
+            <th>Coach</th>
+            <td>{{ ticket[10] }}</td>
+        </tr>
+        <tr>
+            <th>Coach Number</th>
+            <td>{{ ticket[11] }}</td>
+        </tr>
+        <tr>
+            <th>Seat Number</th>
+            <td>{{ ticket[12] }}</td>
+        </tr>
+        <tr>
+            <th>Travel Date</th>
+            <td>{{ ticket[13] }}</td>
+        </tr>
+        <tr>
+            <th>Number of Adults</th>
+            <td>{{ ticket[15] }}</td>
+        </tr>
+        <tr>
+            <th>Number of Children</th>
+            <td>{{ ticket[16] }}</td>
+        </tr>
+        <tr>
+            <th>Total Amount</th>
+            <td>{{ total_amount }}</td>
+        </tr>
+    </table>
+    
+    <form method="POST" action="{{ url_for('confirm_booking', ticket_id=ticket[0]) }}" class="hidden">
+        <button type="submit">Book Ticket</button>
+    </form>
+    <a href="{{ url_for('index') }}">Back to Home</a>
+{% endblock %}
