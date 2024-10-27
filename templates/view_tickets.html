@@ -1,18 +1,16 @@
 {% extends 'base.html' %}
-
 {% block content %}
     <h2>View All Tickets</h2>
-
     {% if tickets %}
         <div class="ticket-cards">
-            {% for ticket in tickets %}
+            {% for ticket, total_amount in tickets %}
                 <div class="ticket-card" onclick="window.location.href='{{ url_for('ticket_view', ticket_id=ticket[0]) }}'">
                     <h3>{{ ticket[3] }}</h3>
                     <p>Date: {{ ticket[13] }}</p>
                     <p>Train: {{ ticket[9] }}</p>
                     <p>Adults: {{ ticket[15] }}</p>
                     <p>Children: {{ ticket[16] }}</p>
-                    <p>Price: {{ (ticket[15] + ticket[16] * 0.5) * price_per_ticket }}</p>
+                    <p>Price: {{ total_amount }}</p>
                 </div>
             {% endfor %}
         </div>

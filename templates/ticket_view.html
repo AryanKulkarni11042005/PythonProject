@@ -1,9 +1,8 @@
 {% extends 'base.html' %}
-
 {% block content %}
     <h2>Ticket Details</h2>
     <p>Here are the details of your ticket:</p>
-    <table>
+    <table class="train_select">
         <tr>
             <th>Ticket ID</th>
             <td>{{ ticket[0] }}</td>
@@ -62,7 +61,7 @@
         </tr>
         <tr>
             <th>Total Amount</th>
-            <td>{{ (ticket[15] + ticket[16] * 0.5) * price_per_ticket }}</td>
+            <td>{{ total_amount }}</td>
         </tr>
     </table>
     <button onclick="window.print()">Print Ticket</button>

@@ -1,9 +1,9 @@
 {% extends 'base.html' %}
 
 {% block content %}
-    <h2>Select a Train</h2>
+    <h2 class="heading">Select a Train</h2>
     {% if trains %}
-        <form method="GET" action="{{ url_for('book_ticket') }}">
+        <form method="GET" action="{{ url_for('book_ticket') }}" class="select">
             <input type="hidden" name="travel_date" value="{{ travel_date }}">
             <table class="train_select">
                 <thead>

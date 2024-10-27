@@ -1,9 +1,8 @@
 {% extends 'base.html' %}
-
 {% block content %}
     <h2>Booking Successful</h2>
     <p>Your ticket has been booked successfully. Here are the details:</p>
-    <table>
+    <table class="train_select">
         <tr>
             <th>Ticket ID</th>
             <td>{{ ticket[0] }}</td>
@@ -62,8 +61,9 @@
         </tr>
         <tr>
             <th>Total Amount</th>
-            <td>{{ (ticket[15] + ticket[16] * 0.5) * price_per_ticket }}</td>
+            <td>{{ total_amount }}</td>
         </tr>
     </table>
-    <a href="{{ url_for('index') }}">Back to Home</a>
+    <button onclick="window.print()">Print Payment Info</button>
+    <a href="{{ url_for('index') }}" class="back">Back to Home</a >
 {% endblock %}

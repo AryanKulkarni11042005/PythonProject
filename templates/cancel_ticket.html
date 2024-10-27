@@ -1,8 +1,6 @@
 {% extends 'base.html' %}
-
 {% block content %}
     <h2>Cancel Ticket</h2>
-
     {% if tickets %}
         <div class="ticket-cards">
             {% for ticket in tickets %}
@@ -16,7 +14,6 @@
     {% else %}
         <p>No tickets found.</p>
     {% endif %}
-
     <script>
         function confirmCancel(ticketId, passengerName, travelDate, trainName) {
             if (confirm(`Are you sure you want to cancel the ticket for ${passengerName} on ${travelDate} for train ${trainName}?`)) {

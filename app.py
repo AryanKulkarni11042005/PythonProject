@@ -114,7 +114,7 @@ def book_ticket():
         
         conn.close()
         
-        return render_template('payment.html', ticket=ticket_info, total_amount=total_amount)
+        return render_template('payment.html', ticket=ticket_info, total_amount=total_amount, price_per_ticket=price_per_ticket)
 
 @app.route('/confirm_booking/<int:ticket_id>', methods=['POST'])
 def confirm_booking(ticket_id):
@@ -122,12 +122,14 @@ def confirm_booking(ticket_id):
     cursor = conn.cursor()
     
     # Fetch the ticket information
-    cursor.execute('SELECT * FROM ticket_booking WHERE id = ?', (ticket_id,))
-    ticket = cursor.fetchone()
+    cursor.execute('''
+        SELECT tb.*, ti.price
+        FROM ticket_booking tb
+        JOIN train_info ti ON tb.train_id = ti.id
+        WHERE tb.id = ?
+    ''', (ticket_id,))
     
-    # Fetch the price per ticket from the train_info table
-    cursor.execute('SELECT price FROM train_info WHERE id = ?', (ticket[2],))
-    price_per_ticket = cursor.fetchone()[0]
+    ticket = cursor.fetchone()
     
     conn.close()
     
@@ -135,41 +137,51 @@ def confirm_booking(ticket_id):
         flash('Ticket not found', 'error')
         return redirect(url_for('view_tickets'))
     
+    no_of_adults = ticket[15]
+    no_of_children = ticket[16]
+    price_per_ticket = ticket[-1]
+    total_amount = (no_of_adults + no_of_children * 0.5) * price_per_ticket
+    
     flash('Ticket booked successfully!', 'success')
-    return render_template('booking_success.html', ticket=ticket, price_per_ticket=price_per_ticket)
+    return render_template('booking_success.html', ticket=ticket, total_amount=total_amount)
 
 @app.route('/view_tickets')
 def view_tickets():
     conn = sqlite3.connect('railway.db')
     cursor = conn.cursor()
     
-    cursor.execute('SELECT * FROM ticket_booking')
+    cursor.execute('''
+        SELECT tb.*, ti.price
+        FROM ticket_booking tb
+        JOIN train_info ti ON tb.train_id = ti.id
+    ''')
     
     tickets = cursor.fetchall()
-    print(f"Retrieved tickets: {tickets}")  # Debugging statement to check fetched tickets
-    
-    # Fetch the price per ticket for each ticket
-    tickets_with_price = []
-    for ticket in tickets:
-        cursor.execute('SELECT price FROM train_info WHERE id = ?', (ticket[2],))
-        price_per_ticket = cursor.fetchone()[0]
-        tickets_with_price.append(ticket + (price_per_ticket,))
-    
     conn.close()
     
-    return render_template('view_tickets.html', tickets=tickets_with_price)
+    tickets_with_amount = []
+    for ticket in tickets:
+        no_of_adults = ticket[15]
+        no_of_children = ticket[16]
+        price_per_ticket = ticket[-1]
+        total_amount = (no_of_adults + no_of_children * 0.5) * price_per_ticket
+        tickets_with_amount.append((ticket, total_amount))
+    
+    return render_template('view_tickets.html', tickets=tickets_with_amount)
 
 @app.route('/ticket_view/<int:ticket_id>')
 def ticket_view(ticket_id):
     conn = sqlite3.connect('railway.db')
     cursor = conn.cursor()
     
-    cursor.execute('SELECT * FROM ticket_booking WHERE id = ?', (ticket_id,))
-    ticket = cursor.fetchone()
+    cursor.execute('''
+        SELECT tb.*, ti.price
+        FROM ticket_booking tb
+        JOIN train_info ti ON tb.train_id = ti.id
+        WHERE tb.id = ?
+    ''', (ticket_id,))
     
-    # Fetch the price per ticket from the train_info table
-    cursor.execute('SELECT price FROM train_info WHERE id = ?', (ticket[2],))
-    price_per_ticket = cursor.fetchone()[0]
+    ticket = cursor.fetchone()
     
     conn.close()
     
@@ -177,28 +189,36 @@ def ticket_view(ticket_id):
         flash('Ticket not found', 'error')
         return redirect(url_for('view_tickets'))
     
-    return render_template('ticket_view.html', ticket=ticket, price_per_ticket=price_per_ticket)
+    no_of_adults = ticket[15]
+    no_of_children = ticket[16]
+    price_per_ticket = ticket[-1]
+    total_amount = (no_of_adults + no_of_children * 0.5) * price_per_ticket
+    
+    return render_template('ticket_view.html', ticket=ticket, total_amount=total_amount)
 
 @app.route('/cancel_ticket', methods=['GET'])
 def cancel_ticket():
     conn = sqlite3.connect('railway.db')
     cursor = conn.cursor()
     
-    cursor.execute('SELECT * FROM ticket_booking')
+    cursor.execute('''
+        SELECT tb.*, ti.price
+        FROM ticket_booking tb
+        JOIN train_info ti ON tb.train_id = ti.id
+    ''')
     
     tickets = cursor.fetchall()
-    print(f"Retrieved tickets: {tickets}")  # Debugging statement to check fetched tickets
-    
-    # Fetch the price per ticket for each ticket
-    tickets_with_price = []
-    for ticket in tickets:
-        cursor.execute('SELECT price FROM train_info WHERE id = ?', (ticket[2],))
-        price_per_ticket = cursor.fetchone()[0]
-        tickets_with_price.append(ticket + (price_per_ticket,))
-    
     conn.close()
     
-    return render_template('cancel_ticket.html', tickets=tickets_with_price)
+    tickets_with_amount = []
+    for ticket in tickets:
+        no_of_adults = ticket[15]
+        no_of_children = ticket[16]
+        price_per_ticket = ticket[-1]
+        total_amount = (no_of_adults + no_of_children * 0.5) * price_per_ticket
+        tickets_with_amount.append((ticket, total_amount))
+    
+    return render_template('cancel_ticket.html', tickets=tickets_with_amount)
 
 @app.route('/confirm_cancel_ticket')
 def confirm_cancel_ticket():

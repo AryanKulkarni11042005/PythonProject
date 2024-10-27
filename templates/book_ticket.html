@@ -11,7 +11,7 @@
             </ul>
         {% endif %}
     {% endwith %}
-    <form method="POST" action="{{ url_for('book_ticket') }}">
+    <form method="POST" action="{{ url_for('book_ticket') }}" class="book">
         <input type="hidden" name="train_id" value="{{ request.args.get('train_id') }}">
         <input type="hidden" name="travel_date" value="{{ request.args.get('travel_date') }}">
         <label for="name">Passenger Name:</label>
