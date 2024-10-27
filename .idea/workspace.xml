@@ -4,20 +4,8 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="945bd54f-dca8-478a-b4a9-d044347af1e1" name="Changes" comment="v3.0">
+    <list default="true" id="945bd54f-dca8-478a-b4a9-d044347af1e1" name="Changes" comment="Final Version">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app.py" beforeDir="false" afterPath="$PROJECT_DIR$/app.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/database.py" beforeDir="false" afterPath="$PROJECT_DIR$/database.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/railway.db" beforeDir="false" afterPath="$PROJECT_DIR$/railway.db" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/static/css/style.css" beforeDir="false" afterPath="$PROJECT_DIR$/static/css/style.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/base.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/base.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/book_ticket.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/book_ticket.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/booking_success.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/booking_success.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/cancel_ticket.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/cancel_ticket.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/search_trains.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/search_trains.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/select_train.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/select_train.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/ticket_view.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/ticket_view.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/view_tickets.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/view_tickets.html" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -193,7 +181,23 @@
       <option name="project" value="LOCAL" />
       <updated>1730016578323</updated>
     </task>
-    <option name="localTasksCounter" value="15" />
+    <task id="LOCAL-00015" summary="Final Version">
+      <option name="closed" value="true" />
+      <created>1730028270324</created>
+      <option name="number" value="00015" />
+      <option name="presentableId" value="LOCAL-00015" />
+      <option name="project" value="LOCAL" />
+      <updated>1730028270324</updated>
+    </task>
+    <task id="LOCAL-00016" summary="Final Version">
+      <option name="closed" value="true" />
+      <created>1730028283605</created>
+      <option name="number" value="00016" />
+      <option name="presentableId" value="LOCAL-00016" />
+      <option name="project" value="LOCAL" />
+      <updated>1730028283605</updated>
+    </task>
+    <option name="localTasksCounter" value="17" />
     <servers />
   </component>
   <component name="VcsManagerConfiguration">
@@ -202,14 +206,15 @@
     <MESSAGE value="Revert V1.0" />
     <MESSAGE value="V2.0" />
     <MESSAGE value="v3.0" />
-    <option name="LAST_COMMIT_MESSAGE" value="v3.0" />
+    <MESSAGE value="Final Version" />
+    <option name="LAST_COMMIT_MESSAGE" value="Final Version" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
       <breakpoints>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/app.py</url>
-          <line>139</line>
+          <line>146</line>
           <option name="timeStamp" value="1" />
         </line-breakpoint>
       </breakpoints>
